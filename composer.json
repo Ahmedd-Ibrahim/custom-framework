@@ -1,0 +1,15 @@
+{
+    "name": "ahmed/custom-framework",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ahmed Ibrahim",
+            "email": "0ahmedibrahem@gmail.com"
+        }
+    ],
+    "require": {}
+}
