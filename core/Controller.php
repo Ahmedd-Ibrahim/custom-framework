@@ -4,8 +4,8 @@ namespace app\core;
 
 class Controller
 {
-    public function render()
+    public function render($view, array $prams = [])
     {
-        return Application::$app->router->renderView('contact');
+        return Application::$app->router->renderView($view, $prams);
     }
 }

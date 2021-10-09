@@ -3,16 +3,19 @@
 namespace app\controllers;
 
 use app\core\Controller;
+use app\core\Request;
 
 class SiteController extends Controller
 {
     public function show()
     {
-        return $this->render();
+        $name = ['name' => 'Ahmed'];
+
+        return $this->render('contact', $name);
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        // 
+        return $request->getBody();
     }
 }
