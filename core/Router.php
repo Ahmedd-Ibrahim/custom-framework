@@ -8,8 +8,11 @@ class Router
 
     protected Request $request;
 
-    public function __construct(Request $request) {
-        $this->request = $request;
+    protected Response $response;
+
+    public function __construct(Request $request, $response) {
+        $this->request  = $request;
+        $this->response = $response;
     }
 
     public function get($path, $callback)
@@ -24,29 +27,35 @@ class Router
 
     public function resolve()
     {
-        $method = $this->request->getMethod();
+        $method = $this->request->method();
         $path = $this->request->getPath();
         $callback = $this->routes[$method][$path] ?? false;
 
         if($callback == false) {
-
-            Application::$app->response->setStatus(404);
+            $this->response->setStatus(404);
             return "Not Found";
         }
 
         if(is_string($callback)) {
-            return $this->renderView($callback);
+            return $this->renderView($callback, []);
         }
 
         if(is_array($callback)){
             $callback[0] = new $callback[0];
         }
         
-        return call_user_func($callback);
+        return call_user_func($callback, $this->request);
     }
 
-    public function renderView($view)
+    public function renderView($view, array $params = [])
     {
-        return include_once __DIR__ . "/../views/$view.php";
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
+
+        ob_start();
+        include_once Application::$rootPath. "/views/$view.php";
+        return ob_get_clean();
     }
+
 }

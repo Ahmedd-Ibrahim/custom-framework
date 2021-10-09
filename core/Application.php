@@ -10,21 +10,29 @@ class Application
 
     public Response $response;
 
+    public Database $database;
+
     public static Application $app;
 
-    public function __construct() 
+    public static string $rootPath;
+
+    public function __construct($rootPath, $configrationg) 
     {
         self::$app = $this;
+
+        self::$rootPath = $rootPath;
 
         $this->request = new Request();
 
         $this->response = new Response();
 
-        $this->router = new Router($this->request);
+        $this->router = new Router($this->request, $this->response);
+
+        $this->database = new Database($configrationg['db']);
     }
 
     public function run()
     {
-        return $this->router->resolve();
+        echo $this->router->resolve();
     }
 }
