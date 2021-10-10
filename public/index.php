@@ -8,18 +8,9 @@ use app\controllers\SiteController;
 use app\core\Application;
 
 
-$dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
 
-$configration = [
-    'db' => [
-        'dsn' => $_ENV['DB_DSN'],
-        'username' => $_ENV['DB_USERNAME'],
-        'password'=> $_ENV['DB_PASSWORD'],
-    ]
-];
 
-$app = new Application(dirname(__DIR__), $configration);
+$app = require_once __DIR__ . '/../core/App.php';
 
 $app->router->get('/contact', [SiteController::class, 'show']);
 $app->router->post('/contact', [SiteController::class, 'store']);
