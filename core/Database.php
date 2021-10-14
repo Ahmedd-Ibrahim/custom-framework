@@ -11,8 +11,8 @@ class Database
         $this->connect();
     }
 
-    public function connect()
+    private function connect()
     {
-        return $pdo = new \PDO($this->config['dsn'], $this->config['username'], $this->config['password']);
+        return new \PDO($this->config['dsn'], $this->config['username'], $this->config['password']);
     }
 }

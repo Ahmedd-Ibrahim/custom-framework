@@ -10,21 +10,33 @@ class Router
 
     protected Response $response;
 
+    public static Router $router;
+
     public function __construct(Request $request, $response) {
+        
+        self::$router = $this;
+
         $this->request  = $request;
+
         $this->response = $response;
+
+        $this->routesFiles();
     }
 
-    public function get($path, $callback)
-    {
-        $this->routes['get'][$path] = $callback;
-    }
+   public static function __callStatic($name, $arguments)
+   {
+       if ($name == 'get'){
+        call_user_func([self::$router, 'getMethod'], $arguments[0], $arguments[1]);
+       }
 
-    public function post($path, $callback)
-    {
-        $this->routes['post'][$path] = $callback;
-    }
+       if ($name == 'post'){
+        call_user_func([self::$router, 'postMethod'], $arguments[0], $arguments[1]);
+       }
+   }
 
+    /**
+     * @return false|mixed|string|void
+     */
     public function resolve()
     {
         $method = $this->request->method();
@@ -46,7 +58,12 @@ class Router
         
         return call_user_func($callback, $this->request);
     }
-
+    
+    /**
+     * @param $view
+     * @param array $params
+     * @return false|string
+     */
     public function renderView($view, array $params = [])
     {
         foreach ($params as $key => $value) {
@@ -58,4 +75,36 @@ class Router
         return ob_get_clean();
     }
 
+
+    /**
+     * @param $path
+     * @param $callback
+     * @return void
+     */
+    private function getMethod($path, $callback)
+    {
+        $this->routes['get'][$path] = $callback;
+    }
+
+    /**
+     * @param $path
+     * @param $callback
+     */
+    private function postMethod($path, $callback)
+    {
+        $this->routes['post'][$path] = $callback;
+    }
+
+    /**
+     * include route files
+     */
+    private function routesFiles()
+    {
+        $routeFiles = dirname(__DIR__) .'/routes';
+        $filterFiles = array_filter(scandir($routeFiles), fn ($file) => str_ends_with($file, '.php'));
+
+        foreach ($filterFiles as $key => $value) {
+            include_once __DIR__ . '/../routes/'. $value;
+        }
+    }
 }

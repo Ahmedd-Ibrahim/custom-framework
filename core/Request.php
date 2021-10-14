@@ -75,7 +75,7 @@ class Request
         return $body;
     }
 
-    public function assignProperties()
+    private function assignProperties()
     {
         foreach ($_REQUEST as $key => $value) {
             $this->{$key} = $value;
