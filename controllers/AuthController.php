@@ -25,6 +25,7 @@ class AuthController extends Controller
 
     public function store(Request $request)
     {
-        return $request->password;
+
+        return $request->getBody();
     }
 }

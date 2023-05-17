@@ -16,7 +16,7 @@ class Application
 
     public static string $rootPath;
 
-    public function __construct($rootPath, $configrationg) 
+    public function __construct($rootPath, $configurations)
     {
         self::$app = $this;
 
@@ -28,7 +28,7 @@ class Application
 
         $this->router = new Router($this->request, $this->response);
 
-        $this->database = new Database($configrationg['db']);
+        $this->database = new Database($configurations['db']);
     }
 
     public function run()

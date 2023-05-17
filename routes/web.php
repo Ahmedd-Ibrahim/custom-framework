@@ -1,6 +1,7 @@
 <?php
 
 use app\core\Router;
+use app\controllers\AuthController;
 use app\controllers\SiteController;
 
 Router::get('/', [SiteController::class, 'index']);
